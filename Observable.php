@@ -3,6 +3,11 @@
 require_once "Disposable.php";
 require_once "Observer.php";
 
+interface IObservable
+{
+	public function SubscribeObserver( IObserver $observer );
+}
+
 trait TObservable
 {
 	public function Select( callable $selector )
@@ -56,7 +61,7 @@ trait TObservable
 	}
 }
 
-class AnonymouseObservable
+class AnonymouseObservable implements IObservable
 {
 	use TObservable;
 
