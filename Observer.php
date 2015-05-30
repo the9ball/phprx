@@ -11,9 +11,9 @@ interface IObserver
 
 trait TObserver
 {
-	public $onNextListener;
-	public $onCompletedListener;
-	public $onErrorListener;
+	private $onNextListener;
+	private $onCompletedListener;
+	private $onErrorListener;
 	private $disposed = false;
 
 	public function OnNext( $value )
@@ -59,10 +59,24 @@ class AnonymouseObserver implements IObserver, IDisposable
 
 	private $disposable;
 
-	function __construct( callable $onNext, callable $onCompleted, callable $onError, IDisposable $disposable )
+	public static function CreateCallable( callable $onNext, callable $onCompleted, callable $onError, IDisposable $disposable )
 	{
-		$this->AddListener( $onNext, $onCompleted, $onError );
-		$this->disposable = $disposable;
+		$instance = new AnonymouseObserver();
+		$instance->AddListener( $onNext, $onCompleted, $onError );
+		$instance->disposable = $disposable;
+		return $instance;
+	}
+
+	public static function CreateObserver( IObserver $observer, IDisposable $disposable )
+	{
+		$instance = new AnonymouseObserver();
+		$instance->AddListener(
+			$observer->onNextListener,
+			$observer->onCompletedListener,
+			$observer->onErrorListener
+		);
+		$instance->disposable = $disposable;
+		return $instance;
 	}
 
 	public function Dispose()
@@ -74,9 +88,14 @@ class AnonymouseObserver implements IObserver, IDisposable
 
 class Observer
 {
-	public static function Create( callable $onNext, callable $onCompleted, callable $onError, IDisposable $disposable )
+	public static function CreateCallable( callable $onNext, callable $onCompleted, callable $onError, IDisposable $disposable )
 	{
-		return new AnonymouseObserver( $onNext, $onCompleted, $onError, $disposable );
+		return AnonymouseObserver::CreateCallable( $onNext, $onCompleted, $onError, $disposable );
+	}
+
+	public static function CreateObserver( IObserver $observer, IDisposable $disposable )
+	{
+		return AnonymouseObserver::CreateObserver( $observer, $disposable );
 	}
 }
 

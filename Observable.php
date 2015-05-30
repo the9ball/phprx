@@ -54,12 +54,7 @@ class AnonymouseObservable
 	{
 		$sd = new SingleAssignmentDisposable();
 
-		$this->observer = Observer::Create(
-			$observer->onNextListener,
-			$observer->onCompletedListener,
-			$observer->onErrorListener,
-			$sd
-		);
+		$this->observer = Observer::CreateObserver( $observer, $sd );
 
 		$s = $this->subscribe;
 		$sd->disposable = $s( $this->observer );
@@ -70,7 +65,7 @@ class AnonymouseObservable
 	public function Subscribe( callable $onNext, callable $onCompleted, callable $onError )
 	{
 		return $this->SubscribeObserver(
-			Observer::Create( $onNext, $onCompleted, $onError, new EmptyDisposable() )
+			Observer::CreateCallable( $onNext, $onCompleted, $onError, new EmptyDisposable() )
 		);
 	}
 }
