@@ -2,6 +2,7 @@
 
 require_once "Disposable.php";
 require_once "Observer.php";
+require_once "ReactiveProperty.php";
 
 interface IObservable
 {
@@ -58,6 +59,16 @@ trait TObservable
 				);
 			}
 		);
+	}
+
+	public function ToReactiveProperty()
+	{
+		return ReactiveProperty::CreateObservable( $this );
+	}
+
+	public function ToReadOnlyReactiveProperty()
+	{
+		return ReadOnlyReactiveProperty::CreateObservable( $this );
 	}
 }
 

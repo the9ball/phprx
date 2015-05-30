@@ -70,5 +70,48 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals( 1, $count );
 		$this->assertEquals( 3, $rp->GetValue() );
 	}
+
+	public function testToReactiveProperty()
+	{
+		$s  = new Subject();
+		$rp = $s->ToReactiveProperty();
+
+		$s->OnNext( 1 );
+		$s->OnNext( 2 );
+		$s->OnNext( 3 );
+		$s->OnCompleted();
+
+		$this->assertInstanceOf( "ReactiveProperty", $rp );
+		$this->assertEquals( 3, $rp->GetValue() );
+	}
+
+	public function testToReactivePropertySetValue()
+	{
+		$s  = new Subject();
+		$rp = $s->ToReactiveProperty();
+
+		$s->OnNext( 1 );
+		$s->OnNext( 2 );
+		$s->OnNext( 3 );
+		$s->OnCompleted();
+
+		$rp->SetValue( 5 );
+
+		$this->assertEquals( 5, $rp->GetValue() );
+	}
+
+	public function testToReadOnlyReactiveProperty()
+	{
+		$s  = new Subject();
+		$rp = $s->ToReadOnlyReactiveProperty();
+
+		$s->OnNext( 1 );
+		$s->OnNext( 2 );
+		$s->OnNext( 3 );
+		$s->OnCompleted();
+
+		$this->assertInstanceOf( "ReadOnlyReactiveProperty", $rp );
+		$this->assertEquals( 3, $rp->GetValue() );
+	}
 }
 

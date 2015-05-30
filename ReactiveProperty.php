@@ -72,6 +72,7 @@ class ReadOnlyReactiveProperty implements IReadOnlyReactiveProperty
 			function(){},
 			function($e){}
 		);
+		return $instance;
 	}
 
 	private function SetValue( $value )
@@ -110,6 +111,7 @@ class ReactiveProperty implements IReactiveProperty
 			function(){},
 			function($e){}
 		);
+		return $instance;
 	}
 
 	public function SetValue( $value )
