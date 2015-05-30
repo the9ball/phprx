@@ -14,34 +14,39 @@ trait TObserver
 	private $onNextListener;
 	private $onCompletedListener;
 	private $onErrorListener;
-	private $disposed = false;
+	private $disposed;
+
+	function __construct()
+	{
+		$this->onNextListener      = array();
+		$this->onCompletedListener = array();
+		$this->onErrorListener     = array();
+		$this->disposed = false;
+	}
 
 	public function OnNext( $value )
 	{
 		if ( true === $this->disposed ) return;
-		$f = $this->onNextListener;
-		if ( null != $f ) $f( $value );
+		foreach ( $this->onNextListener as $f ) $f( $value );
 	}
 
 	public function OnCompleted()
 	{
 		if ( true === $this->disposed ) return;
-		$f = $this->onCompletedListener;
-		if ( null != $f ) $f();
+		foreach ( $this->onCompletedListener as $f ) $f();
 	}
 
 	public function OnError( $error )
 	{
 		if ( true === $this->disposed ) return;
-		$f = $this->onErrorListener;
-		if ( null != $f ) $f( $value );
+		foreach ( $this->onErrorListener as $f ) $f( $error );
 	}
 
 	public function AddListener( callable $onNext, callable $onCompleted, callable $onError )
 	{
-		$this->onNextListener      = $onNext;
-		$this->onCompletedListener = $onCompleted;
-		$this->onErrorListener     = $onError;
+		$this->onNextListener[]      = $onNext;
+		$this->onCompletedListener[] = $onCompleted;
+		$this->onErrorListener[]     = $onError;
 	}
 
 	public function Dispose()
@@ -69,14 +74,12 @@ class AnonymouseObserver implements IObserver, IDisposable
 
 	public static function CreateObserver( IObserver $observer, IDisposable $disposable )
 	{
-		$instance = new AnonymouseObserver();
-		$instance->AddListener(
-			$observer->onNextListener,
-			$observer->onCompletedListener,
-			$observer->onErrorListener
+		return self::CreateCallable(
+			function($x) use (&$observer) { $observer->onNext($x); },
+			function() use (&$observer) { $observer->onCompleted(); },
+			function($e) use (&$observer) { $observer->onError($e); },
+			$disposable
 		);
-		$instance->disposable = $disposable;
-		return $instance;
 	}
 
 	public function Dispose()

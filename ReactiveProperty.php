@@ -64,7 +64,7 @@ class ReadOnlyReactiveProperty implements IReadOnlyReactiveProperty
 	public static function CreateDefaultValue( $defaultValue )
 	{
 		$instance = new ReadOnlyReactiveProperty();
-		$instance->value = $defaultValue;
+		$instance->SetValue( $defaultValue );
 		return $instance;
 	}
 
@@ -97,7 +97,7 @@ class ReactiveProperty implements IReactiveProperty
 	public static function CreateDefaultValue( $defaultValue )
 	{
 		$instance = new ReactiveProperty();
-		$instance->value = $defaultValue;
+		$instance->SetValue( $defaultValue );
 		return $instance;
 	}
 

@@ -9,14 +9,13 @@ class Subject implements IObserver, IObservable, IDisposable
 
 	public function SubscribeObserver( IObserver $observer )
 	{
-		// TODO:add $observer to ListenerList
+		$this->AddListener(
+			function($x) use (&$observer) { $observer->onNext($x); },
+			function() use (&$observer) { $observer->onCompleted(); },
+			function($e) use (&$observer) { $observer->onError($e); }
+		);
 
-		$sd = new SingleAssignmentDisposable();
-
-		$s = $this->subscribe;
-		$sd->disposable = $s( $this );
-
-		return $sd;
+		return $this;
 	}
 
 	public function Subscribe( callable $onNext, callable $onCompleted, callable $onError )

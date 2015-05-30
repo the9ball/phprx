@@ -107,5 +107,42 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$this->assertSame( 4, $count );
 		$this->assertSame( 10, $sum );
 	}
+
+	public function testMultiCallee()
+	{
+		$countA = 0;
+		$countB = 0;
+
+		$s = new Subject();
+		$dA = $s
+			->Where(
+				function($x){ return 0 != ( $x % 2 ); }
+			)
+			->Subscribe(
+				function($x) use (&$countA) { ++$countA; },
+				function(){},
+				function($e){}
+			);
+		$dB = $s
+			->Where(
+				function($x){ return 0 == ( $x % 2 ); }
+			)
+			->Subscribe(
+				function($x) use (&$countB) { ++$countB; },
+				function(){},
+				function($e){}
+			);
+
+		$s->OnNext( 1 );
+		$s->OnNext( 2 );
+		$s->OnNext( 3 );
+		$s->OnCompleted();
+		$dA->Dispose();
+		$dB->Dispose();
+
+		$this->assertSame( 2, $countA );
+		$this->assertSame( 1, $countB );
+	}
+
 }
 
