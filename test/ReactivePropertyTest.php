@@ -19,8 +19,8 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$rp->SetValue( 3 );
 		$d->Dispose();
 
-		$this->assertEquals( 3, $count );
-		$this->assertEquals( 3, $rp->GetValue() );
+		$this->assertSame( 3, $count );
+		$this->assertSame( 3, $rp->GetValue() );
 	}
 
 	public function testSelect()
@@ -43,9 +43,9 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$rp->SetValue( 3 );
 		$d->Dispose();
 
-		$this->assertEquals( 3, $count );
-		$this->assertEquals( 3, $rp->GetValue() );
-		$this->assertEquals( 13, $last );
+		$this->assertSame( 3, $count );
+		$this->assertSame( 3, $rp->GetValue() );
+		$this->assertSame( 13, $last );
 	}
 
 	public function testWhere()
@@ -67,8 +67,8 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$rp->SetValue( 3 );
 		$d->Dispose();
 
-		$this->assertEquals( 1, $count );
-		$this->assertEquals( 3, $rp->GetValue() );
+		$this->assertSame( 1, $count );
+		$this->assertSame( 3, $rp->GetValue() );
 	}
 
 	public function testToReactiveProperty()
@@ -82,7 +82,7 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 
 		$this->assertInstanceOf( "ReactiveProperty", $rp );
-		$this->assertEquals( 3, $rp->GetValue() );
+		$this->assertSame( 3, $rp->GetValue() );
 	}
 
 	public function testToReactivePropertySetValue()
@@ -97,7 +97,7 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 
 		$rp->SetValue( 5 );
 
-		$this->assertEquals( 5, $rp->GetValue() );
+		$this->assertSame( 5, $rp->GetValue() );
 	}
 
 	public function testToReadOnlyReactiveProperty()
@@ -111,7 +111,7 @@ class ReactivePropertyTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 
 		$this->assertInstanceOf( "ReadOnlyReactiveProperty", $rp );
-		$this->assertEquals( 3, $rp->GetValue() );
+		$this->assertSame( 3, $rp->GetValue() );
 	}
 }
 

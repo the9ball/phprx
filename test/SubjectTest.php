@@ -23,8 +23,8 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 		$d->Dispose();
 
-		$this->assertEquals( 4, $count );
-		$this->assertEquals( 10, $sum );
+		$this->assertSame( 4, $count );
+		$this->assertSame( 10, $sum );
 	}
 
 	public function testSelect()
@@ -50,8 +50,8 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 		$d->Dispose();
 
-		$this->assertEquals( 4, $count );
-		$this->assertEquals( 50, $sum );
+		$this->assertSame( 4, $count );
+		$this->assertSame( 50, $sum );
 	}
 
 	public function testWhere()
@@ -77,8 +77,8 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 		$d->Dispose();
 
-		$this->assertEquals( 2, $count );
-		$this->assertEquals( 6, $sum );
+		$this->assertSame( 2, $count );
+		$this->assertSame( 6, $sum );
 	}
 
 	public function testDo()
@@ -104,8 +104,8 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$s->OnCompleted();
 		$d->Dispose();
 
-		$this->assertEquals( 4, $count );
-		$this->assertEquals( 10, $sum );
+		$this->assertSame( 4, $count );
+		$this->assertSame( 10, $sum );
 	}
 }
 
