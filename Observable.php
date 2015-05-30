@@ -36,6 +36,24 @@ trait TObservable
 			}
 		);
 	}
+
+	// TODO:rename
+	public function Do_( callable $function )
+	{
+		return Observable::Create(
+			function($o) use ($function)
+			{
+				return $this->Subscribe(
+					function(&$x) use ($function, $o) {
+						$function( $x );
+						$o->OnNext( $x );
+					},
+					function() use ($o) { $o->OnCompleted(); },
+					function($e) use ($o) { $o->OnError($e); }
+				);
+			}
+		);
+	}
 }
 
 class AnonymouseObservable
