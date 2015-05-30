@@ -61,6 +61,31 @@ trait TObservable
 		);
 	}
 
+	public function Merge( IObservable $source )
+	{
+		return Observable::Create(
+			function($o) use ($source)
+			{
+				$d = new CompositeDisposable();
+				$d->AddTo(
+					$this->Subscribe(
+						function($x) use ($o) { $o->OnNext( $x ); },
+						function() use ($o) { $o->OnCompleted(); },
+						function($e) use ($o) { $o->OnError($e); }
+					)
+				);
+				$d->AddTo(
+					$source->Subscribe(
+						function($x) use ($o) { $o->OnNext( $x ); },
+						function() use ($o) { $o->OnCompleted(); },
+						function($e) use ($o) { $o->OnError($e); }
+					)
+				);
+				return $d;
+			}
+		);
+	}
+
 	public function ToReactiveProperty()
 	{
 		return ReactiveProperty::CreateObservable( $this );

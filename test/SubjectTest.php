@@ -144,5 +144,28 @@ class SubjectTest extends PHPUnit_Framework_TestCase
 		$this->assertSame( 1, $countB );
 	}
 
+	public function testMerge()
+	{
+		$a = new Subject();
+		$b = new Subject();
+		$l = array();
+
+		$a->Merge( $b )
+			->Subscribe(
+				function($x)use(&$l){$l[]=$x;},
+				function(){},
+				function($e){}
+			);
+
+		$a->OnNext( 1 );
+		$b->OnNext( 10 );
+		$a->OnNext( 2 );
+		$a->OnNext( 3 );
+		$b->OnNext( 11 );
+
+		$this->assertSame(
+			array( 1, 10, 2, 3, 11 ), $l
+		);
+	}
 }
 
