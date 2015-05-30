@@ -42,11 +42,17 @@ trait TReactiveProperty
 	{
 		return $this->subject->Subscribe( $onNext, $onCompleted, $onError );
 	}
+
+	public function SetValue( $value )
+	{
+		$this->value = $value;
+		$this->subject->OnNext( $value );
+	}
 }
 
 class ReadOnlyReactiveProperty implements IReadOnlyReactiveProperty
 {
-	use TObservable, TReactiveProperty;
+	use TObservable, TReactiveProperty { SetValue as private; }
 
 	public static function CreateEmpty()
 	{
@@ -73,12 +79,6 @@ class ReadOnlyReactiveProperty implements IReadOnlyReactiveProperty
 			function($e){}
 		);
 		return $instance;
-	}
-
-	private function SetValue( $value )
-	{
-		$this->value = $value;
-		$this->subject->OnNext( $value );
 	}
 }
 
@@ -112,12 +112,6 @@ class ReactiveProperty implements IReactiveProperty
 			function($e){}
 		);
 		return $instance;
-	}
-
-	public function SetValue( $value )
-	{
-		$this->value = $value;
-		$this->subject->OnNext( $value );
 	}
 }
 
